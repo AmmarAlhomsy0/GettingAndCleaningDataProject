@@ -1,0 +1,25 @@
+# CodeBook: UCI HAR Dataset - Tidy Data
+
+## Dataset Overview
+This dataset is derived from accelerometer readings from smartphones.
+
+## Variables
+### Identifiers:
+- `subject`: The ID of the participant (1-30).
+- `activity`: The activity performed (e.g., WALKING, SITTING).
+
+### Measurement Variables:
+- `TimeBodyAccelerometerMeanX`: Mean acceleration in the X direction.
+- `TimeBodyAccelerometerStdY`: Standard deviation in the Y direction.
+- `FrequencyBodyGyroscopeMeanZ`: Mean gyroscope frequency in the Z direction.
+
+## Data Processing Steps
+1. **Merging Training and Test Sets**
+2. **Extracting Mean and Standard Deviation**
+3. **Assigning Descriptive Activity Names**
+4. **Renaming Variables**
+5. **Creating the Tidy Dataset**
+
+## Final Output
+The cleaned dataset is stored as:
+- `tidy_dataset.txt`

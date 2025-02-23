@@ -1,0 +1,52 @@
+ library(dplyr)
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+> filename <- "dataset.zip"
+> dataFolder <- "UCI HAR Dataset"
+> if (!file.exists(filename)) {fileURL < "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip" download.file(fileURL, filename, method = "curl")}
+Error: unexpected symbol in "if (!file.exists(filename)) {fileURL < "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip" download.file"
+> if (!file.exists(filename)) {fileURL < "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
++ if (!file.exists(filename)) {fileURL < "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip" download.file(fileURL, filename, method = "curl")}
+Error: unexpected symbol in:
+"ts(filename)) {fileURL < "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
+if (!file.exists(filename)) {fileURL < "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip" download.file"
+> if (!file.exists(filename)) {fileURL < "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
++ download.file(fileURL, filename, method = "curl")}
+> if (!file.exists(dataFolder)) {unzip(filename)}
+> features <- read.table("UCI HAR Dataset/features.txt", col.names = c("index", "feature"))
+> activity_labels <- read.table("UCI HAR Dataset/activity_labels.txt", col.names = c("code", "activity"))
+> subject_train <- read.table("UCI HAR Dataset/train/subject_train.txt", col.names = "subject")
+> x_train <- read.table("UCI HAR Dataset/train/X_train.txt", col.names = features$feature)
+> y_train <- read.table("UCI HAR Dataset/train/y_train.txt", col.names = "code")
+> subject_test <- read.table("UCI HAR Dataset/test/subject_test.txt", col.names = "subject")
+> x_test <- read.table("UCI HAR Dataset/test/X_test.txt", col.names = features$feature)
+> y_test <- read.table("UCI HAR Dataset/test/y_test.txt", col.names = "code")
+> data_X <- rbind(x_train, x_test)
+> data_Y <- rbind(y_train, y_test)
+> data_subject <- rbind(subject_train, subject_test)
+> data_merged <- cbind(data_subject, data_Y, data_X)
+> selected_features <- grepl("mean\\(\\)|std\\(\\)", features$feature)
+> data_filtered <- data_merged[, c(TRUE, TRUE, selected_features)]
+> data_filtered$code <- activity_labels[data_filtered$code, 2]
+> names(data_filtered)[2] <- "activity"
+> names(data_filtered) <- gsub("^t", "Time", names(data_filtered))
+> names(data_filtered) <- gsub("^f", "Frequency", names(data_filtered))
+> names(data_filtered) <- gsub("Acc", "Accelerometer", names(data_filtered))
+> names(data_filtered) <- gsub("Gyro", "Gyroscope", names(data_filtered))
+> names(data_filtered) <- gsub("Mag", "Magnitude", names(data_filtered))
+> names(data_filtered) <- gsub("BodyBody", "Body", names(data_filtered))
+> data_tidy <- data_filtered %>%
++   group_by(subject, activity) %>%
++   summarise_all(mean)
+> write.table(data_tidy, "tidy_dataset.txt", row.name = FALSE)
+> write.csv(data_tidy, "tidy_dataset.csv", row.names = FALSE)
+> write.csv(data_tidy, "tidy_dataset.csv", row.names = FALSE)
